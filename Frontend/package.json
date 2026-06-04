@@ -1,0 +1,8 @@
+{
+  "name": "frontend-apaw",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "mkdir -p dist && echo '<h1>Front-end Provisório</h1>' > dist/index.html"
+  }
+}
