@@ -1,0 +1,13 @@
+body { background-color: #f4f5f7; color: #333333; font-size: 15px; }
+.text-slate { color: #1e293b; }
+.text-purple { color: #6200ea; }
+.border-purple { border-color: #6200ea !important; }
+.print-page { max-width: 850px; border: 1px solid #e2e8f0; }
+.section-title { font-size: 16px; font-weight: 700; color: #1e293b; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+.leading-relaxed { line-height: 1.6; }
+
+@media print {
+    .no-print { display: none !important; }
+    body { background-color: #ffffff; }
+    .print-page { border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; max-width: 100%; }
+}

@@ -1,0 +1,42 @@
+/* Reutiliza o design de inputs do briefing */
+.custom-input {
+    background-color: #1a1b23 !important;
+    border: 1px solid #2e303f !important;
+    color: #ffffff !important;
+    padding: 10px !important;
+    border-radius: 8px !important;
+}
+.custom-input:focus {
+    border-color: #9d4edd !important;
+    box-shadow: 0 0 8px rgba(157, 78, 221, 0.3) !important;
+}
+
+.btn-outline-purple {
+    border: 1px solid #9d4edd;
+    color: #d4a3ff;
+}
+.btn-outline-purple:hover {
+    background-color: #9d4edd;
+    color: white;
+}
+
+/* Bloco de Módulo Interno */
+.module-item {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid #2e303f;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    transition: border-color 0.3s;
+}
+.module-item:hover {
+    border-color: rgba(157, 78, 221, 0.4);
+}
+
+.btn-delete-mod {
+    background: none;
+    border: none;
+    color: #ff5555;
+    cursor: pointer;
+    font-size: 16px;
+}

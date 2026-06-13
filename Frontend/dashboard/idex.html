@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Escopo - Dashboard</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Nosso CSS Local -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+        <!-- BARRA LATERAL (SIDEBAR) -->
+        <aside class="sidebar" id="sidebar-wrapper">
+            <div class="sidebar-brand text-center">
+                <i class="fa-solid fa-layer-group"></i> 
+            </div>
+            <nav class="sidebar-menu d-flex flex-column gap-2 px-3">
+                <a href="#" class="active"><i class="fa-solid fa-chart-pie me-2"></i> Dashboard</a>
+                <a href="../briefing/index.html"><i class="fa-solid fa-plus me-2"></i> Novos Escopos</a>
+                <a href="../propostas/index.html"><i class="fa-solid fa-file-invoice-dollar"></i> Propostas</a>
+                <a href="#"><i class="fa-solid fa-code me-2"></i> Tecnologias</a>
+                <a href="#"><i class="fa-solid fa-gear me-2"></i> Configurações</a>
+            </nav>
+            <div class="sidebar-logout mt-auto p-3">
+                <a href="#" class="text-danger text-decoration-none"><i class="fa-solid fa-right-from-bracket me-2"></i> Sair</a>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main id="page-content-wrapper" class="w-100 p-4">
+            
+            <!-- HEADER -->
+            <header class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary-subtle">
+                <div class="user-profile d-flex align-items-center gap-2">
+                    <div class="avatar">FN</div>
+                    <span class="fw-medium">Felipe N.</span>
+                    <i class="fa-solid fa-chevron-down font-xs"></i>
+                </div>
+                <div class="logo-center">
+                    <h1 class="h4 mb-0 fw-bold text-white">Assistente <span class="text-purple">de Escopo</span></h1>
+                </div>
+                <div class="header-actions d-flex align-items-center gap-3">
+                    <button class="icon-btn"><i class="fa-solid fa-square-plus"></i></button>
+                    <button class="icon-btn"><i class="fa-solid fa-bell"></i></button>
+                    <div class="search-bar d-flex align-items-center gap-2 px-3 py-1">
+                        <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                        <input type="text" class="bg-transparent border-0 text-white" placeholder="Buscar...">
+                    </div>
+                </div>
+            </header>
+
+            <!-- BOTÃO PRINCIPAL -->
+            <div class="text-center my-4">
+                <button class="btn btn-purple-neon px-5 py-3 fw-bold">
+                    <i class="fa-solid fa-circle-plus me-2"></i> Nova Proposta de Escopo
+                </button>
+            </div>
+
+            <!-- GRID CENTRAL (Bootstrap Row/Col) -->
+            <div class="row g-4">
+                
+                <!-- COLUNA DA ESQUERDA (MÉTRICAS E GRÁFICOS) -->
+                <div class="col-lg-9 d-flex flex-column gap-4">
+                    
+                    <!-- Mini Cards Row -->
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="custom-card p-4 h-100">
+                                <h3 class="card-title-text">Escopos Ativos</h3>
+                                <div class="card-value py-2">12</div>
+                                <p class="card-desc-text mb-0">4 em Andamento | 8 em Revisão</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="custom-card p-4 h-100">
+                                <h3 class="card-title-text">Propostas Enviadas</h3>
+                                <div class="card-value py-2">18</div>
+                                <p class="card-desc-text mb-0">6 Aprovadas | 2 Rejeitadas</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="custom-card p-4 h-100 border-purple">
+                                <h3 class="card-title-text">Faturamento Potencial</h3>
+                                <div class="card-value py-2 text-purple-light">R$ 65.500,00</div>
+                                <p class="text-success small mb-0 fw-medium"><i class="fa-solid fa-arrow-up"></i> +12% vs. Mês Anterior</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos Row -->
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <div class="custom-card p-4">
+                                <h3 class="card-title-text mb-3">Evolução de Escopos Gerados (Ano)</h3>
+                                <div class="mock-chart line-chart"><div class="wave-bg"></div></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="custom-card p-4">
+                                <h3 class="card-title-text mb-3">Status de Propostas</h3>
+                                <div class="mock-chart d-flex align-items-center justify-content-center"><div class="donut"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- COLUNA DA DIREITA (ÚLTIMOS ESCOPOS) -->
+                <div class="col-lg-3">
+                    <div class="custom-card p-4 h-100">
+                        <h2 class="h6 fw-bold mb-4">Últimos Escopos</h2>
+                        
+                        <div class="scope-item p-3 mb-3">
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Cliente:</span><strong>Fábrica de Peças LTDA</strong></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Projeto:</span><strong>Sistemas de PCP</strong></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Status:</span><span class="badge bg-purple-subtle text-purple-light border border-purple-dim">Em Andamento</span></div>
+                        </div>
+
+                        <div class="scope-item p-3 mb-3">
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Cliente:</span><strong>UFMS - Computação</strong></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Projeto:</span><strong>Portal Alunos</strong></div>
+                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Status:</span><span class="badge bg-secondary-subtle text-light">Concluído</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
