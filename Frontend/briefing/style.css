@@ -1,0 +1,47 @@
+/* Estilos específicos para inputs no Dark Mode */
+.custom-input {
+    background-color: #1a1b23 !important;
+    border: 1px solid #2e303f !important;
+    color: #ffffff !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+}
+
+.custom-input:focus {
+    border-color: #9d4edd !important;
+    box-shadow: 0 0 8px rgba(157, 78, 221, 0.3) !important;
+}
+
+.custom-input::placeholder {
+    color: #56596b !important;
+}
+
+.btn-purple {
+    background-color: #2e303f;
+    border: 1px solid #2e303f;
+    color: #9d4edd;
+    transition: all 0.3s;
+}
+
+.btn-purple:hover {
+    background-color: #9d4edd;
+    color: white;
+}
+
+/* Tag de tecnologia gerada por JS */
+.tech-tag {
+    background-color: rgba(157, 78, 221, 0.15);
+    color: #d4a3ff;
+    border: 1px solid rgba(157, 78, 221, 0.4);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tech-tag i {
+    cursor: pointer;
+    color: #ff5555;
+}

@@ -1,0 +1,143 @@
+/* Custom Overrides para Casar o Bootstrap com nossa Identidade */
+body {
+    background-color: #121318;
+    color: #ffffff;
+}
+
+#wrapper {
+    min-height: 100vh;
+}
+
+/* Sidebar Estilizada */
+.sidebar {
+    width: 250px;
+    background-color: #1a1b23;
+    border-right: 1px solid #2e303f;
+}
+.sidebar-brand {
+    font-size: 28px;
+    color: #9d4edd;
+    padding: 25px 0;
+}
+.sidebar-menu a {
+    color: #8e92a3;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+.sidebar-menu a:hover, .sidebar-menu a.active {
+    background-color: rgba(157, 78, 221, 0.15);
+    color: #ffffff;
+}
+.sidebar-menu a.active {
+    border-left: 4px solid #9d4edd;
+}
+
+/* Header Elements */
+.avatar {
+    width: 35px;
+    height: 35px;
+    background-color: #3a3b45;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+.text-purple { color: #9d4edd; }
+.text-purple-light { color: #d4a3ff; }
+.border-purple { border-color: #9d4edd !important; }
+.bg-purple-subtle { background-color: rgba(157, 78, 221, 0.15); }
+.border-purple-dim { border-color: rgba(157, 78, 221, 0.4) !important; }
+
+.search-bar {
+    background-color: #1a1b23;
+    border: 1px solid #2e303f;
+    border-radius: 20px;
+}
+.search-bar input:focus {
+    outline: none;
+}
+.icon-btn {
+    background: none;
+    border: none;
+    color: #8e92a3;
+    font-size: 18px;
+}
+
+/* Botão Neon Central */
+.btn-purple-neon {
+    background-color: #9d4edd;
+    color: white;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+    transition: all 0.3s;
+}
+.btn-purple-neon:hover {
+    background-color: #8a36d2;
+    color: white;
+    box-shadow: 0 0 30px #9d4edd;
+    transform: translateY(-2px);
+}
+
+/* Cards Customizados */
+.custom-card {
+    background-color: #1e1f28;
+    border: 1px solid #2e303f;
+    border-radius: 12px;
+}
+.card-title-text {
+    font-size: 14px;
+    color: #8e92a3;
+}
+.card-value {
+    font-size: 28px;
+    font-weight: bold;
+}
+.card-desc-text {
+    font-size: 12px;
+    color: #8e92a3;
+}
+
+/* Elementos de Gráfico Embutidos */
+.mock-chart {
+    height: 180px;
+    position: relative;
+    border-bottom: 1px solid #333;
+    border-left: 1px solid #333;
+}
+.line-chart { background: linear-gradient(transparent 70%, rgba(157, 78, 221, 0.05)); }
+.wave-bg {
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    bottom: 10px;
+    border-top: 3px solid #9d4edd;
+    border-radius: 50% 50% 0 0 / 40% 40% 0 0;
+}
+.donut {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: conic-gradient(#9d4edd 0% 70%, #2e303f 70% 100%);
+    position: relative;
+}
+.donut::before {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: #1e1f28;
+    border-radius: 50%;
+    top: 20px;
+    left: 20px;
+}
+
+/* Lista de Escopos */
+.scope-item {
+    background-color: rgba(255, 255, 255, 0.01);
+    border: 1px solid #2e303f;
+    border-radius: 8px;
+}
