@@ -49,8 +49,8 @@ window.removerTech = function(index) {
     atualizarTags();
 };
 
-// 2. INTERCEPTANDO O ENVIO DO FORMULÁRIO (CONEXÃO COM BACKEND NO FUTURO)
-formBriefing.addEventListener('submit', function(e) {
+// 2. INTERCEPTANDO O ENVIO DO FORMULÁRIO (CONEXÃO COM BACKEND)
+formBriefing.addEventListener('submit', async function(e) {
     e.preventDefault(); // Evita que a página recarregue
 
     // Captura os dados dos inputs textuais
@@ -61,23 +61,38 @@ formBriefing.addEventListener('submit', function(e) {
         stack: tecnologias // Envia o array de strings criado pelo usuário
     };
 
-    console.log("Dados capturados prontos para a API FastAPI:", dadosBriefing);
+    console.log("Dados enviados para a API FastAPI:", dadosBriefing);
 
     // EFEITO VISUAL: Ativa o estado de carregamento do botão (Loading)
     btnText.textContent = "Processando com Inteligência Artificial...";
     btnSubmit.disabled = true;
     btnSpinner.classList.remove('d-none');
 
-    // MOCK: Simulando o tempo de resposta da API do Gemini (3 segundos de delay)
-    setTimeout(() => {
-        alert("Sucesso! O Python recebeu o briefing e a IA gerou o escopo. Indo para a tela de edição...");
+    try {
+        const response = await fetch('http://localhost:8000/api/briefing', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosBriefing)
+        });
+
+        if (!response.ok) {
+            throw new Error("Falha ao gerar escopo com a IA.");
+        }
+
+        const resultado = await response.json();
         
-        // Restaura o botão
+        // Redireciona o desenvolvedor para a tela de edição passando o ID do escopo gerado
+        window.location.href = `../edicao/index.html?id=${resultado.id}`;
+
+    } catch (error) {
+        console.error("Erro ao gerar escopo:", error);
+        alert("Erro ao comunicar com a IA. Por favor, verifique se o backend está ativo.");
+        
+        // Restaura o botão em caso de erro
         btnText.textContent = "Gerar Escopo com IA";
         btnSubmit.disabled = false;
         btnSpinner.classList.add('d-none');
-        
-        // Redireciona o desenvolvedor para o próximo passo (Crie essa pasta depois!)
-        // window.location.href = "../edicao/index.html";
-    }, 3000);
+    }
 });

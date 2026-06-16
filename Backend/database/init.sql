@@ -50,3 +50,6 @@ CREATE TABLE IF NOT EXISTS itens_escopo (
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (projeto_id) REFERENCES projetos(id) ON DELETE CASCADE
 );
+
+-- 6. DADOS INICIAIS
+INSERT INTO usuarios (id, nome, email, senha) VALUES (1, 'Felipe N.', 'felipe.ngsouza@gmail.com', 'admin') ON DUPLICATE KEY UPDATE id=id;
