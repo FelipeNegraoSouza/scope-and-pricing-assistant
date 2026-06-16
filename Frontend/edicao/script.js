@@ -1,24 +1,68 @@
-// Dados simulados (Mock) que representam o que a IA do Gemini retornaria do backend
-let dadosEscopoIA = [
-    { id: 1, titulo: "Dashboard de Gargalos", descricao: "Interface em tempo real exibindo painéis de eficiência das máquinas e ordens de produção.", horas: 60 },
-    { id: 2, titulo: "Controle de Insumos", descricao: "Banco de dados integrado para dar baixa automática em matérias-primas.", horas: 80 },
-    { id: 3, titulo: "Módulo de Relatórios", descricao: "Exportação de dados históricos em formatos CSV/PDF para análise.", horas: 20 }
-];
+// Variáveis globais para armazenar os dados do escopo e do projeto
+let dadosEscopoIA = [];
+let projetoId = null;
+let projetoDados = {};
 
+// Elementos do DOM mapeados
 const containerModulos = document.getElementById('modules-container');
 const inputValorHora = document.getElementById('valor-hora');
 const txtTotalHoras = document.getElementById('total-horas');
 const txtPrecoFinal = document.getElementById('preco-final');
 const btnAddModulo = document.getElementById('btn-add-modulo');
 const btnSalvar = document.getElementById('btn-salvar-proposta');
+const txtNomeProjetoHeader = document.getElementById('nome-projeto-header');
 
-// 1. RENDERIZAR OS MÓDULOS NA TELA
+const API_BASE = "http://localhost:8000/api";
+
+// 1. CARREGAR DADOS DO PROJETO DA API
+async function carregarProjeto() {
+    const urlParams = new URLSearchParams(window.location.search);
+    projetoId = urlParams.get('id');
+
+    if (!projetoId) {
+        alert("ID do projeto não fornecido na URL!");
+        window.location.href = "../dashboard/index.html";
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/projetos/${projetoId}`);
+        if (!response.ok) throw new Error("Erro ao carregar projeto.");
+
+        projetoDados = await response.json();
+        
+        // Atualiza cabeçalho
+        txtNomeProjetoHeader.textContent = projetoDados.titulo;
+
+        // Mapeia os itens vindo do backend para o array local
+        dadosEscopoIA = projetoDados.itens.map(item => ({
+            id: item.id,
+            titulo: item.titulo_tarefa,
+            descricao: item.descricao_detalhada || "",
+            horas: item.horas_estimadas,
+            complexidade: item.complexidade || "Média"
+        }));
+
+        // Define o valor da hora a partir do primeiro item (se houver), ou 50.00 como padrão
+        if (projetoDados.itens.length > 0) {
+            inputValorHora.value = parseFloat(projetoDados.itens[0].valor_hora) || 50;
+        }
+
+        renderizarModulos();
+
+    } catch (error) {
+        console.error("Erro ao carregar dados do projeto:", error);
+        alert("Erro ao carregar dados do projeto. Verifique se o backend está ativo.");
+    }
+}
+
+// 2. RENDERIZAR OS MÓDULOS NA TELA
 function renderizarModulos() {
     containerModulos.innerHTML = '';
     
     dadosEscopoIA.forEach((modulo, index) => {
         const div = document.createElement('div');
-        div.className = 'module-item';
+        div.className = 'module-item mb-3 p-3';
         div.innerHTML = `
             <div class="row g-3">
                 <div class="col-md-8">
@@ -40,7 +84,7 @@ function renderizarModulos() {
     recalcularTotal();
 }
 
-// 2. ATUALIZAR DADOS DO ARRAY CONFORME O USUÁRIO DIGITA
+// 3. ATUALIZAR DADOS DO ARRAY CONFORME O USUÁRIO DIGITA
 window.atualizarDados = function(index, campo, valor) {
     if (campo === 'horas') {
         dadosEscopoIA[index][campo] = parseInt(valor) || 0;
@@ -50,7 +94,7 @@ window.atualizarDados = function(index, campo, valor) {
     }
 };
 
-// 3. MATEMÁTICA FINANCEIRA (HORAS * VALOR DA HORA)
+// 4. MATEMÁTICA FINANCEIRA (HORAS * VALOR DA HORA)
 function recalcularTotal() {
     const totalHoras = dadosEscopoIA.reduce((soma, mod) => soma + mod.horas, 0);
     const valorHora = parseFloat(inputValorHora.value) || 0;
@@ -63,28 +107,69 @@ function recalcularTotal() {
 // Ouvir mudança no input de valor da hora
 inputValorHora.addEventListener('input', recalcularTotal);
 
-// 4. ADICIONAR NOVO MÓDULO VAZIO
+// 5. ADICIONAR NOVO MÓDULO VAZIO
 btnAddModulo.addEventListener('click', () => {
     dadosEscopoIA.push({
-        id: Date.now(),
+        id: null, // Novo item ainda não tem ID de banco
         titulo: "Novo Módulo Customizado",
-        descricao: "Clique para descrever as regras de negócio deste módulo...",
-        horas: 10
+        descricao: "Descreva as regras de negócio deste módulo...",
+        horas: 10,
+        complexidade: "Média"
     });
     renderizarModulos();
 });
 
-// 5. REMOVER MÓDULO
+// 6. REMOVER MÓDULO
 window.removerModulo = function(index) {
     dadosEscopoIA.splice(index, 1);
     renderizarModulos();
 };
 
-// 6. REDIRECIONAR PARA O MODO CLIENTE AO FINALIZAR
-btnSalvar.addEventListener('click', () => {
-    alert("Escopo salvo com sucesso! Redirecionando para a visualização oficial do cliente...");
-    window.location.href = "../cliente/index.html";
+// 7. SALVAR DADOS NO BACKEND E IR PARA O CLIENTE
+btnSalvar.addEventListener('click', async () => {
+    const totalHoras = dadosEscopoIA.reduce((soma, mod) => soma + mod.horas, 0);
+    const valorHora = parseFloat(inputValorHora.value) || 0;
+    const precoFinal = totalHoras * valorHora;
+
+    // Prepara payload de atualização
+    const payload = {
+        titulo: projetoDados.titulo,
+        status: "Gerado pela IA", // Atualiza status para indicar que está pronto para visualização
+        valor_total: precoFinal,
+        itens: dadosEscopoIA.map(modulo => ({
+            titulo_tarefa: modulo.titulo,
+            descricao_detalhada: modulo.descricao,
+            horas_estimadas: modulo.horas,
+            complexidade: modulo.complexidade || "Média",
+            valor_hora: valorHora,
+            custo_estimado: modulo.horas * valorHora
+        }))
+    };
+
+    try {
+        btnSalvar.disabled = true;
+        btnSalvar.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Salvando...';
+
+        const response = await fetch(`${API_BASE}/projetos/${projetoId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error("Erro ao salvar o escopo.");
+
+        // Redireciona para visualização do cliente
+        window.location.href = `../cliente/index.html?id=${projetoId}`;
+
+    } catch (error) {
+        console.error("Erro ao salvar proposta:", error);
+        alert("Não foi possível salvar o escopo. Verifique a conexão com o backend.");
+        btnSalvar.disabled = false;
+        btnSalvar.innerHTML = '<i class="fa-solid fa-floppy-disk me-2"></i> Salvar e Visualizar';
+    }
 });
 
 // Inicialização da tela
-renderizarModulos();
+document.addEventListener("DOMContentLoaded", carregarProjeto);

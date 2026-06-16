@@ -56,7 +56,7 @@
 
             <!-- BOTÃO PRINCIPAL -->
             <div class="text-center my-4">
-                <button class="btn btn-purple-neon px-5 py-3 fw-bold">
+                <button class="btn btn-purple-neon px-5 py-3 fw-bold" onclick="window.location.href='../briefing/index.html'">
                     <i class="fa-solid fa-circle-plus me-2"></i> Nova Proposta de Escopo
                 </button>
             </div>
@@ -72,22 +72,22 @@
                         <div class="col-md-4">
                             <div class="custom-card p-4 h-100">
                                 <h3 class="card-title-text">Escopos Ativos</h3>
-                                <div class="card-value py-2">12</div>
-                                <p class="card-desc-text mb-0">4 em Andamento | 8 em Revisão</p>
+                                <div class="card-value py-2" id="escopos-ativos-val">0</div>
+                                <p class="card-desc-text mb-0" id="escopos-ativos-desc">0 em Andamento</p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="custom-card p-4 h-100">
                                 <h3 class="card-title-text">Propostas Enviadas</h3>
-                                <div class="card-value py-2">18</div>
-                                <p class="card-desc-text mb-0">6 Aprovadas | 2 Rejeitadas</p>
+                                <div class="card-value py-2" id="propostas-enviadas-val">0</div>
+                                <p class="card-desc-text mb-0" id="propostas-enviadas-desc">0 Aprovadas</p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="custom-card p-4 h-100 border-purple">
                                 <h3 class="card-title-text">Faturamento Potencial</h3>
-                                <div class="card-value py-2 text-purple-light">R$ 65.500,00</div>
-                                <p class="text-success small mb-0 fw-medium"><i class="fa-solid fa-arrow-up"></i> +12% vs. Mês Anterior</p>
+                                <div class="card-value py-2 text-purple-light" id="faturamento-val">R$ 0,00</div>
+                                <p class="text-success small mb-0 fw-medium"><i class="fa-solid fa-arrow-up"></i> Atualizado</p>
                             </div>
                         </div>
                     </div>
@@ -114,17 +114,8 @@
                 <div class="col-lg-3">
                     <div class="custom-card p-4 h-100">
                         <h2 class="h6 fw-bold mb-4">Últimos Escopos</h2>
-                        
-                        <div class="scope-item p-3 mb-3">
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Cliente:</span><strong>Fábrica de Peças LTDA</strong></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Projeto:</span><strong>Sistemas de PCP</strong></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Status:</span><span class="badge bg-purple-subtle text-purple-light border border-purple-dim">Em Andamento</span></div>
-                        </div>
-
-                        <div class="scope-item p-3 mb-3">
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Cliente:</span><strong>UFMS - Computação</strong></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Projeto:</span><strong>Portal Alunos</strong></div>
-                            <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Status:</span><span class="badge bg-secondary-subtle text-light">Concluído</span></div>
+                        <div id="ultimos-escopos-container">
+                            <!-- JS vai preencher dinamicamente -->
                         </div>
                     </div>
                 </div>

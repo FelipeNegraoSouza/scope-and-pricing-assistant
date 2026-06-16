@@ -10,15 +10,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: assistente_escopo
+      MYSQL_USER: apaw_user
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - ./backend/database:/docker-entrypoint-initdb.d
+      - ./Backend/database:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
     networks:
       - rede_projeto
 
   backend:
-    build: ./backend
+    build: ./Backend
     container_name: apaw_backend_api
     restart: always
     ports:
@@ -28,15 +29,19 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       - db
+    networks:
+      - rede_projeto
 
   frontend:
-    build: ./frontend
+    build: ./Frontend
     container_name: apaw_frontend_web
     restart: always
     ports:
       - "80:80"
     depends_on:
       - backend
+    networks:
+      - rede_projeto
 
 volumes:
   mysql_data:
