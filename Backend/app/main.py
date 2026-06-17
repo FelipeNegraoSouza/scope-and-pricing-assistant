@@ -18,12 +18,17 @@ def seed_default_user():
             default_user = models.Usuario(
                 id=1,
                 nome="Felipe N.",
-                email="felipe.ngsouza@gmail.com",
+                email="teste@gmail.com",
                 senha="admin"
             )
             db.add(default_user)
             db.commit()
             print("Usuário padrão semeado com sucesso no banco de dados.")
+        else:
+            if usuario.email == "felipe.ngsouza@gmail.com":
+                usuario.email = "teste@gmail.com"
+                db.commit()
+                print("E-mail do usuário padrão atualizado para teste@gmail.com no banco de dados.")
     except Exception as e:
         print(f"Erro ao semear usuário padrão: {e}")
     finally:
