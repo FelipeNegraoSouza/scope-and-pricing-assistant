@@ -21,7 +21,12 @@ async function carregarProjeto() {
 
     if (!projetoId) {
         alert("ID do projeto não fornecido na URL!");
-        window.location.href = "../dashboard/index.html";
+        const url = "../dashboard/index.html";
+        if (window.navigateTo) {
+            window.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
         return;
     }
 
@@ -161,7 +166,12 @@ btnSalvar.addEventListener('click', async () => {
         if (!response.ok) throw new Error("Erro ao salvar o escopo.");
 
         // Redireciona para visualização do cliente
-        window.location.href = `../cliente/index.html?id=${projetoId}`;
+        const url = `../cliente/index.html?id=${projetoId}`;
+        if (window.navigateTo) {
+            window.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
 
     } catch (error) {
         console.error("Erro ao salvar proposta:", error);

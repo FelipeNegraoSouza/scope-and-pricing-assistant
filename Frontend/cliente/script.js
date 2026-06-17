@@ -13,7 +13,12 @@ async function carregarProposta() {
 
     if (!projetoId) {
         alert("ID do projeto não fornecido!");
-        window.location.href = "../dashboard/index.html";
+        const url = "../dashboard/index.html";
+        if (window.navigateTo) {
+            window.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
         return;
     }
 

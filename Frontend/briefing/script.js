@@ -84,7 +84,12 @@ formBriefing.addEventListener('submit', async function(e) {
         const resultado = await response.json();
         
         // Redireciona o desenvolvedor para a tela de edição passando o ID do escopo gerado
-        window.location.href = `../edicao/index.html?id=${resultado.id}`;
+        const url = `../edicao/index.html?id=${resultado.id}`;
+        if (window.navigateTo) {
+            window.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
 
     } catch (error) {
         console.error("Erro ao gerar escopo:", error);

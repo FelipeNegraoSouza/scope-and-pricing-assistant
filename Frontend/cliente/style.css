@@ -11,3 +11,23 @@ body { background-color: #f4f5f7; color: #333333; font-size: 15px; }
     body { background-color: #ffffff; }
     .print-page { border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; max-width: 100%; }
 }
+
+/* Transições Animadas de Página */
+@media screen {
+    body {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    }
+
+    body.page-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    body.page-exiting {
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+    }
+}

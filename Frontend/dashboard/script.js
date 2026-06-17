@@ -39,10 +39,13 @@ async function carregarDashboard() {
             item.style.cursor = 'pointer';
             item.onclick = () => {
                 // Redireciona para edição se for Rascunho/Gerado pela IA, ou visualização do cliente se aprovado
-                if (escopo.status === 'Aprovado' || escopo.status === 'Concluído') {
-                    window.location.href = `../cliente/index.html?id=${escopo.id}`;
+                const url = (escopo.status === 'Aprovado' || escopo.status === 'Concluído')
+                    ? `../cliente/index.html?id=${escopo.id}`
+                    : `../edicao/index.html?id=${escopo.id}`;
+                if (window.navigateTo) {
+                    window.navigateTo(url);
                 } else {
-                    window.location.href = `../edicao/index.html?id=${escopo.id}`;
+                    window.location.href = url;
                 }
             };
 
