@@ -297,3 +297,25 @@ def delete_projeto(id: int, db: Session = Depends(get_db), usuario_id: int = Dep
     db.delete(projeto)
     db.commit()
     return {"status": "success", "message": "Projeto excluído com sucesso."}
+
+# 7. GET /api/projetos
+@router.get("/projetos", response_model=List[schemas.ProjetoSchema])
+def get_projetos(status: Optional[str] = None, db: Session = Depends(get_db), usuario_id: int = Depends(get_current_user_id)):
+    query = db.query(models.Projeto).filter(models.Projeto.usuario_id == usuario_id)
+    if status:
+        query = query.filter(models.Projeto.status == status)
+    projetos = query.all()
+    
+    result = []
+    for p in projetos:
+        cliente = db.query(models.Cliente).filter(models.Cliente.id == p.cliente_id).first()
+        cliente_nome = cliente.nome_empresa if cliente else "Cliente Desconhecido"
+        
+        itens = db.query(models.ItemEscopo).filter(models.ItemEscopo.projeto_id == p.id).all()
+        
+        response_schema = schemas.ProjetoSchema.model_validate(p)
+        response_schema.cliente_nome_empresa = cliente_nome
+        response_schema.itens = [schemas.ItemEscopoSchema.model_validate(i) for i in itens]
+        result.append(response_schema)
+        
+    return result

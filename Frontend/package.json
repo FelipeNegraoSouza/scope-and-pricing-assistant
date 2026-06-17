@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && cp -r dashboard briefing cliente edicao propostas tecnologias configuracoes dist/ && cp transitions.js index.html login_style.css login_script.js dist/"
+    "build": "mkdir -p dist && cp -r dashboard briefing cliente edicao propostas tecnologias configuracoes cronograma dist/ && cp transitions.js index.html login_style.css login_script.js dist/"
   }
 }
