@@ -52,4 +52,4 @@ CREATE TABLE IF NOT EXISTS itens_escopo (
 );
 
 -- 6. DADOS INICIAIS
-INSERT INTO usuarios (id, nome, email, senha) VALUES (1, 'Felipe N.', 'felipe.ngsouza@gmail.com', 'admin') ON DUPLICATE KEY UPDATE id=id;
+INSERT INTO usuarios (id, nome, email, senha) VALUES (1, 'Felipe N.', 'teste@gmail.com', 'admin') ON DUPLICATE KEY UPDATE id=id;

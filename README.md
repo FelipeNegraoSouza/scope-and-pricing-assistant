@@ -71,7 +71,7 @@ Como o frontend é composto por páginas estáticas leves:
 ## 🔑 Credenciais Padrão de Acesso
 
 Após carregar a tela de Login/Cadastro, você pode entrar usando o usuário desenvolvedor semeado automaticamente no banco de dados:
-* **E-mail:** `felipe.ngsouza@gmail.com`
+* **E-mail:** `teste@gmail.com`
 * **Senha:** `admin`
 
 *Você também pode alternar para a aba **Cadastre-se** para criar uma conta nova e exclusiva com seu próprio e-mail e senha.*
