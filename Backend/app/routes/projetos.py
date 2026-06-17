@@ -281,3 +281,13 @@ def approve_proposal(id: int, db: Session = Depends(get_db)):
     projeto.status = "Aprovado"
     db.commit()
     return {"status": "success", "message": "Proposta aprovada com sucesso."}
+
+# 6. DELETE /api/projetos/{id}
+@router.delete("/projetos/{id}")
+def delete_projeto(id: int, db: Session = Depends(get_db), usuario_id: int = Depends(get_current_user_id)):
+    projeto = db.query(models.Projeto).filter(models.Projeto.id == id, models.Projeto.usuario_id == usuario_id).first()
+    if not projeto:
+        raise HTTPException(status_code=404, detail="Projeto não encontrado.")
+    db.delete(projeto)
+    db.commit()
+    return {"status": "success", "message": "Projeto excluído com sucesso."}
