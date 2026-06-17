@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Escopo - Cronograma</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS compartilhado da dashboard + estilo local -->
+    <link rel="stylesheet" href="../dashboard/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+        <!-- BARRA LATERAL (SIDEBAR) -->
+        <aside class="sidebar" id="sidebar-wrapper">
+            <div class="sidebar-brand text-center">
+                <i class="fa-solid fa-layer-group"></i> 
+            </div>
+            <nav class="sidebar-menu d-flex flex-column gap-2 px-3">
+                <a href="../dashboard/index.html"><i class="fa-solid fa-chart-pie me-2"></i> Dashboard</a>
+                <a href="../briefing/index.html"><i class="fa-solid fa-plus me-2"></i> Novos Escopos</a>
+                <a href="#" class="active"><i class="fa-solid fa-calendar-days me-2"></i> Cronograma</a>
+                <a href="../propostas/index.html"><i class="fa-solid fa-file-invoice-dollar"></i> Propostas</a>
+                <a href="../tecnologias/index.html"><i class="fa-solid fa-code me-2"></i> Tecnologias</a>
+                <a href="../configuracoes/index.html"><i class="fa-solid fa-gear me-2"></i> Configurações</a>
+            </nav>
+            <div class="sidebar-logout mt-auto p-3">
+                <a href="#" class="text-danger text-decoration-none"><i class="fa-solid fa-right-from-bracket me-2"></i> Sair</a>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main id="page-content-wrapper" class="w-100 p-4">
+            <!-- HEADER -->
+            <header class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary-subtle">
+                <div class="user-profile d-flex align-items-center gap-2">
+                    <div class="avatar">FN</div>
+                    <span class="fw-medium">Felipe N.</span>
+                    <i class="fa-solid fa-chevron-down font-xs"></i>
+                </div>
+                <div class="logo-center">
+                    <h1 class="h4 mb-0 fw-bold text-white">Cronograma <span class="text-purple">e Calendário</span></h1>
+                </div>
+                <div class="header-actions d-flex align-items-center gap-3">
+                    <button class="icon-btn"><i class="fa-solid fa-bell"></i></button>
+                    <div class="search-bar d-flex align-items-center gap-2 px-3 py-1">
+                        <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                        <input type="text" class="bg-transparent border-0 text-white" placeholder="Buscar...">
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTROLES DO CALENDÁRIO & LEGENDA -->
+            <div class="row g-4 align-items-center mb-4">
+                <div class="col-md-6 d-flex align-items-center gap-3">
+                    <button class="btn btn-purple-btn px-3" id="btn-prev-month">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <h2 class="h4 mb-0 fw-bold text-white text-capitalize" id="current-month-year" style="min-width: 200px;">
+                        Carregando...
+                    </h2>
+                    <button class="btn btn-purple-btn px-3" id="btn-next-month">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="d-flex flex-wrap justify-content-md-end gap-3" id="projects-legend">
+                        <!-- Legenda de cores dos projetos será populada aqui -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRADE DO CALENDÁRIO -->
+            <div class="custom-card p-4 shadow-sm mb-4">
+                <div class="calendar-wrapper">
+                    <!-- Dias da semana -->
+                    <div class="calendar-header-week">
+                        <div>Seg</div>
+                        <div>Ter</div>
+                        <div>Qua</div>
+                        <div>Qui</div>
+                        <div>Sex</div>
+                        <div class="weekend-day">Sáb</div>
+                        <div class="weekend-day">Dom</div>
+                    </div>
+                    <!-- Dias do mês (grid gerado por JavaScript) -->
+                    <div class="calendar-grid" id="calendar-days-grid">
+                        <!-- Gerado dinamicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETALHES DO DIA SELECIONADO -->
+            <div class="custom-card p-4 animate__animated animate__fadeIn" id="day-details-container" style="display: none;">
+                <h3 class="h6 fw-bold mb-3 text-uppercase text-muted tracking-wider"><i class="fa-solid fa-circle-info me-2 text-purple-light"></i>Atividades Planejadas para <span id="selected-day-label" class="text-white"></span></h3>
+                <div id="day-tasks-list" class="d-flex flex-column gap-3">
+                    <!-- JS preenche -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../transitions.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+/* Estilo Específico do Calendário e Cronograma */
+
+/* Botão de Controle do Mês */
+.btn-purple-btn {
+    background-color: #1e1f28;
+    border: 1px solid #2e303f;
+    color: #8e92a3;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.btn-purple-btn:hover {
+    background-color: rgba(157, 78, 221, 0.15);
+    border-color: #9d4edd;
+    color: #ffffff;
+}
+
+/* Legenda dos Projetos */
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    background-color: #1a1b23;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #2e303f;
+    color: #ffffff;
+}
+.legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Estrutura do Calendário */
+.calendar-wrapper {
+    width: 100%;
+}
+
+.calendar-header-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: #8e92a3;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #2e303f;
+    padding-bottom: 12px;
+}
+.weekend-day {
+    color: #636674;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* Células dos Dias */
+.calendar-day {
+    min-height: 110px;
+    background-color: #1a1b23;
+    border: 1px solid #2e303f;
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+.calendar-day:hover {
+    background-color: #22232e;
+    border-color: rgba(157, 78, 221, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-day.other-month {
+    opacity: 0.2;
+    background-color: transparent;
+    border-color: transparent;
+    pointer-events: none;
+}
+
+.calendar-day.today {
+    border-color: #9d4edd !important;
+    background-color: rgba(157, 78, 221, 0.04);
+    box-shadow: inset 0 0 10px rgba(157, 78, 221, 0.1);
+}
+
+.day-number {
+    font-size: 13px;
+    font-weight: 700;
+    color: #8e92a3;
+    align-self: flex-end;
+}
+.calendar-day.today .day-number {
+    color: #d4a3ff;
+}
+
+/* Faixas das Tarefas no Calendário */
+.tasks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.task-band {
+    height: 8px;
+    border-radius: 4px;
+    width: 100%;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+}
+.task-band:hover {
+    transform: scaleY(1.3);
+    filter: brightness(1.2);
+}
+
+/* Custom Tooltip estilo popover da faixa */
+.task-band::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #0b0c10;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    border: 1px solid #2e303f;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 10;
+}
+.task-band:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Container de Detalhes do Dia */
+#day-details-container {
+    border-left: 4px solid #9d4edd;
+}
+
+.day-task-item {
+    background-color: #1a1b23;
+    border: 1px solid #2e303f;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.day-task-color-bar {
+    width: 6px;
+    height: 40px;
+    border-radius: 3px 0 0 3px;
+}
