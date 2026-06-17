@@ -80,8 +80,13 @@ async function carregarDashboard() {
             };
 
             item.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong class="text-purple-light text-truncate" style="max-width: 80%;">${escopo.projeto}</strong>
+                    <button class="btn-delete-project border-0 bg-transparent text-danger p-0 animate__animated animate__fadeIn" title="Excluir Escopo">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
                 <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Cliente:</span><strong>${escopo.cliente}</strong></div>
-                <div class="d-flex justify-content-between small mb-1"><span class="text-muted">Projeto:</span><strong>${escopo.projeto}</strong></div>
                 <div class="d-flex justify-content-between small mb-1">
                     <span class="text-muted">Valor:</span>
                     <strong>${escopo.valor_total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong>
@@ -91,6 +96,31 @@ async function carregarDashboard() {
                     <span class="badge ${statusClass}">${escopo.status}</span>
                 </div>
             `;
+
+            // Lógica do botão de exclusão
+            const btnDelete = item.querySelector('.btn-delete-project');
+            btnDelete.onclick = async (e) => {
+                e.stopPropagation(); // Impede a propagação para o clique do card principal
+                if (confirm(`Deseja realmente excluir permanentemente o projeto "${escopo.projeto}"?`)) {
+                    try {
+                        const userId = localStorage.getItem("usuario_id") || "1";
+                        const res = await fetch(`${API_BASE}/projetos/${escopo.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                "X-User-Id": userId
+                            }
+                        });
+                        if (!res.ok) throw new Error("Erro ao excluir o projeto.");
+                        
+                        // Recarrega o dashboard atualizado
+                        carregarDashboard();
+                    } catch (err) {
+                        console.error(err);
+                        alert("Não foi possível excluir este projeto. Verifique a conexão.");
+                    }
+                }
+            };
+
             container.appendChild(item);
         });
 

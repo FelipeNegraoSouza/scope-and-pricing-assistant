@@ -159,3 +159,14 @@ body.page-exiting {
     transform: translateY(-10px);
     transition: opacity 0.3s ease-in, transform 0.3s ease-in;
 }
+
+.btn-delete-project {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.btn-delete-project:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
-import google.generativeai as genai
+from google import genai
 
 def get_current_user_id(x_user_id: Optional[str] = Header(None, alias="X-User-Id")) -> int:
     if x_user_id:
@@ -22,8 +22,12 @@ router = APIRouter()
 
 # Configuração da API do Gemini
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+client = None
 if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+    try:
+        client = genai.Client(api_key=GEMINI_API_KEY)
+    except Exception as e:
+        print(f"Erro ao inicializar o cliente Gemini: {e}")
 else:
     print("AVISO: GEMINI_API_KEY não configurada. A geração com IA usará dados mockados de fallback.")
 
@@ -112,9 +116,8 @@ def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Ses
 
     # 3. Invocar IA do Gemini para gerar os módulos
     modulos = []
-    if GEMINI_API_KEY:
+    if client:
         try:
-            model = genai.GenerativeModel('gemini-1.5-flash')
             prompt = f"""
             Você é um especialista em engenharia de requisitos e precificação de software.
             Com base nas seguintes informações de briefing fornecidas pelo cliente:
@@ -140,7 +143,10 @@ def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Ses
             ]
             Não inclua explicações, introduções ou blocos de código Markdown. Retorne estritamente o JSON.
             """
-            response = model.generate_content(prompt)
+            response = client.models.generate_content(
+                model="gemini-3.5-flash",
+                contents=prompt,
+            )
             texto = response.text.strip()
             
             # Limpa blocos de código markdown se o modelo tiver retornado
@@ -281,3 +287,13 @@ def approve_proposal(id: int, db: Session = Depends(get_db)):
     projeto.status = "Aprovado"
     db.commit()
     return {"status": "success", "message": "Proposta aprovada com sucesso."}
+
+# 6. DELETE /api/projetos/{id}
+@router.delete("/projetos/{id}")
+def delete_projeto(id: int, db: Session = Depends(get_db), usuario_id: int = Depends(get_current_user_id)):
+    projeto = db.query(models.Projeto).filter(models.Projeto.id == id, models.Projeto.usuario_id == usuario_id).first()
+    if not projeto:
+        raise HTTPException(status_code=404, detail="Projeto não encontrado.")
+    db.delete(projeto)
+    db.commit()
+    return {"status": "success", "message": "Projeto excluído com sucesso."}
