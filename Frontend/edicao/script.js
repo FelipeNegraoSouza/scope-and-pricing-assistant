@@ -21,12 +21,22 @@ async function carregarProjeto() {
 
     if (!projetoId) {
         alert("ID do projeto não fornecido na URL!");
-        window.location.href = "../dashboard/index.html";
+        const url = "../dashboard/index.html";
+        if (window.navigateTo) {
+            window.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
         return;
     }
 
     try {
-        const response = await fetch(`${API_BASE}/projetos/${projetoId}`);
+        const userId = localStorage.getItem("usuario_id") || "1";
+        const response = await fetch(`${API_BASE}/projetos/${projetoId}`, {
+            headers: {
+                "X-User-Id": userId
+            }
+        });
         if (!response.ok) throw new Error("Erro ao carregar projeto.");
 
         projetoDados = await response.json();
@@ -150,10 +160,12 @@ btnSalvar.addEventListener('click', async () => {
         btnSalvar.disabled = true;
         btnSalvar.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Salvando...';
 
+        const userId = localStorage.getItem("usuario_id") || "1";
         const response = await fetch(`${API_BASE}/projetos/${projetoId}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-User-Id': userId
             },
             body: JSON.stringify(payload)
         });
@@ -161,7 +173,12 @@ btnSalvar.addEventListener('click', async () => {
         if (!response.ok) throw new Error("Erro ao salvar o escopo.");
 
         // Redireciona para visualização do cliente
-        window.location.href = `../cliente/index.html?id=${projetoId}`;
+        const url = `../cliente/index.html?id=${projetoId}`;
+        if (window.navigateTo) {
+            window.navigateTo(url);
+        } else {
+            window.location.href = url;
+        }
 
     } catch (error) {
         console.error("Erro ao salvar proposta:", error);

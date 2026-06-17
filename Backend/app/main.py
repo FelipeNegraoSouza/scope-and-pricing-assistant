@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from .database import engine, Base, SessionLocal
-from .routes import projetos
+from .routes import projetos, usuarios
 from . import models
 
 # Inicializa as tabelas no banco de dados se não existirem
@@ -41,13 +41,14 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Registra as rotas da API
 app.include_router(projetos.router, prefix="/api", tags=["Projetos & Escopos"])
+app.include_router(usuarios.router, prefix="/api", tags=["Usuários & Autenticação"])
 
 @app.get("/")
 def read_root():

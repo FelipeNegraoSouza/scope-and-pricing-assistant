@@ -2,8 +2,38 @@ const API_BASE = "http://localhost:8000/api";
 
 // 1. BUSCAR DADOS DO BACKEND E POPULAR TELA
 async function carregarDashboard() {
+    // Atualiza perfil no header dinamicamente
+    const nomeUsuario = localStorage.getItem("usuario_nome") || "Felipe N.";
+    const profileName = document.querySelector(".user-profile .fw-medium");
+    const profileAvatar = document.querySelector(".user-profile .avatar");
+    
+    if (profileName) profileName.textContent = nomeUsuario;
+    if (profileAvatar) {
+        const iniciais = nomeUsuario.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+        profileAvatar.textContent = iniciais;
+    }
+
+    // Configura evento de Logout
+    const logoutBtn = document.querySelector(".sidebar-logout a");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.clear();
+            if (window.navigateTo) {
+                window.navigateTo("../index.html");
+            } else {
+                window.location.href = "../index.html";
+            }
+        });
+    }
+
     try {
-        const response = await fetch(`${API_BASE}/dashboard`);
+        const userId = localStorage.getItem("usuario_id") || "1";
+        const response = await fetch(`${API_BASE}/dashboard`, {
+            headers: {
+                "X-User-Id": userId
+            }
+        });
         if (!response.ok) throw new Error("Erro ao buscar dados do dashboard");
 
         const data = await response.json();
@@ -39,10 +69,13 @@ async function carregarDashboard() {
             item.style.cursor = 'pointer';
             item.onclick = () => {
                 // Redireciona para edição se for Rascunho/Gerado pela IA, ou visualização do cliente se aprovado
-                if (escopo.status === 'Aprovado' || escopo.status === 'Concluído') {
-                    window.location.href = `../cliente/index.html?id=${escopo.id}`;
+                const url = (escopo.status === 'Aprovado' || escopo.status === 'Concluído')
+                    ? `../cliente/index.html?id=${escopo.id}`
+                    : `../edicao/index.html?id=${escopo.id}`;
+                if (window.navigateTo) {
+                    window.navigateTo(url);
                 } else {
-                    window.location.href = `../edicao/index.html?id=${escopo.id}`;
+                    window.location.href = url;
                 }
             };
 

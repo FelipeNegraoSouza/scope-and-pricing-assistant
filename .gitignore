@@ -1,0 +1,19 @@
+# Virtual Environment
+Backend/venv/
+
+# Local Database (SQLite)
+Backend/test.db
+Backend/*.db
+
+# Python Caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+.env.local
+
+# Frontend build outputs
+Frontend/dist/

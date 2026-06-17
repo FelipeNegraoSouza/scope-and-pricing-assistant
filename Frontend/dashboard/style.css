@@ -141,3 +141,21 @@ body {
     border: 1px solid #2e303f;
     border-radius: 8px;
 }
+
+/* Transições Animadas de Página */
+body {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+body.page-loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.page-exiting {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+}
