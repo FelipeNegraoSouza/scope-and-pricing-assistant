@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && cp -r dashboard briefing cliente edicao dist/ && cp transitions.js dist/ && echo '<html><head><meta http-equiv=\"refresh\" content=\"0; url=./dashboard/index.html\"></head></html>' > dist/index.html"
+    "build": "mkdir -p dist && cp -r dashboard briefing cliente edicao propostas tecnologias configuracoes dist/ && cp transitions.js index.html dist/"
   }
 }
