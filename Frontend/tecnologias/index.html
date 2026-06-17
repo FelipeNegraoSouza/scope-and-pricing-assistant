@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Nosso CSS Local Compartilhado -->
     <link rel="stylesheet" href="../dashboard/style.css">
+    <!-- CSS Específico de Tecnologias -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -40,20 +42,82 @@
                 <span class="text-muted small">Gerenciamento de Ferramentas e Custos</span>
             </header>
 
-            <!-- CARD INFORMATIVO (EM DESENVOLVIMENTO) -->
-            <div class="row justify-content-center my-5">
-                <div class="col-md-8 text-center">
-                    <div class="custom-card p-5 shadow-sm">
-                        <div class="mb-4">
-                            <i class="fa-solid fa-microchip fa-3x text-purple-light"></i>
+            <!-- CONTEÚDO CRUD DE TECNOLOGIAS -->
+            <div class="row g-4 animate__animated animate__fadeIn">
+                <!-- Coluna Formulário (Cadastro / Edição) -->
+                <div class="col-lg-5">
+                    <div class="custom-card p-4 shadow-sm h-100">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fa-solid fa-square-plus text-purple fs-4 me-2"></i>
+                            <h2 class="h5 mb-0 fw-bold text-white" id="form-title">Cadastrar Tecnologia</h2>
                         </div>
-                        <h2 class="h4 text-white fw-bold mb-3">Módulo em Desenvolvimento</h2>
-                        <p class="text-muted mb-4">
-                            Esta seção permitirá gerenciar o catálogo de tecnologias (linguagens, frameworks, bancos de dados, serviços na nuvem) e configurar custos base por hora para estimativas automatizadas mais assertivas da IA.
-                        </p>
-                        <a href="../dashboard/index.html" class="btn btn-purple-neon px-4 py-2">
-                            <i class="fa-solid fa-house me-2"></i> Voltar ao Dashboard
-                        </a>
+                        <p class="text-muted small mb-4">Adicione ferramentas ao catálogo e configure seus respectivos valores hora e multiplicadores.</p>
+                        
+                        <div class="alert alert-danger d-none" id="alert-error"></div>
+                        <div class="alert alert-success d-none" id="alert-success"></div>
+
+                        <form id="tech-form">
+                            <!-- Campo ID Oculto para Edição -->
+                            <input type="hidden" id="tech-id" value="">
+
+                            <div class="mb-3">
+                                <label for="tech-nome" class="form-label text-muted small fw-bold">Nome da Tecnologia</label>
+                                <input type="text" class="form-control bg-dark border-secondary text-white rounded-3 py-2" id="tech-nome" placeholder="Ex: Python, React, AWS" required>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="tech-custo" class="form-label text-muted small fw-bold">Custo Base (R$/h)</label>
+                                    <input type="number" step="0.01" min="1" class="form-control bg-dark border-secondary text-white rounded-3 py-2" id="tech-custo" placeholder="100.00" value="100.00" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="tech-multiplicador" class="form-label text-muted small fw-bold">Multiplicador</label>
+                                    <input type="number" step="0.05" min="0.5" class="form-control bg-dark border-secondary text-white rounded-3 py-2" id="tech-multiplicador" placeholder="1.00" value="1.00" required>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-purple-neon w-100 py-2" id="btn-submit">
+                                    <i class="fa-solid fa-save me-2"></i>Salvar
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary w-50 py-2 d-none" id="btn-cancel">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Coluna Catálogo (Lista de Tecnologias) -->
+                <div class="col-lg-7">
+                    <div class="custom-card p-4 shadow-sm h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-list-check text-purple fs-4 me-2"></i>
+                                <h2 class="h5 mb-0 fw-bold text-white">Catálogo Ativo</h2>
+                            </div>
+                            <span class="badge bg-purple-subtle text-purple fw-bold px-3 py-2 rounded-pill" id="tech-count">0 Tecnologias</span>
+                        </div>
+                        <p class="text-muted small mb-4">Esses multiplicadores incidem sobre a precificação na geração de novos escopos da IA.</p>
+
+                        <!-- Input para busca rápida de tecnologias no catálogo -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                <input type="text" class="form-control bg-dark border-secondary text-white" id="search-tech" placeholder="Filtrar tecnologia...">
+                            </div>
+                        </div>
+
+                        <!-- Lista de Tecnologias cadastrados -->
+                        <div class="tech-list-container scrollable-y mt-3" style="max-height: 400px; overflow-y: auto;">
+                            <div id="tech-list" class="d-flex flex-column gap-3">
+                                <!-- Preenchido dinamicamente via JS -->
+                                <div class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-spinner fa-spin fa-2x mb-3 text-purple"></i>
+                                    <p>Carregando catálogo...</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,5 +128,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Script de transição de página -->
     <script src="../transitions.js"></script>
+    <!-- Script de controle de Tecnologias -->
+    <script src="script.js"></script>
 </body>
 </html>

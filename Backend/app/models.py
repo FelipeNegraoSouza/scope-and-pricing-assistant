@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Decimal, ForeignKey, DateTime, func
+from sqlalchemy import Column, Integer, String, Text, DECIMAL, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -13,6 +13,7 @@ class Usuario(Base):
 
     clientes = relationship("Cliente", back_populates="usuario", cascade="all, delete-orphan")
     projetos = relationship("Projeto", back_populates="usuario", cascade="all, delete-orphan")
+    tecnologias = relationship("Tecnologia", back_populates="usuario", cascade="all, delete-orphan")
 
 class Cliente(Base):
     __tablename__ = "clientes"
@@ -35,7 +36,7 @@ class Projeto(Base):
     titulo = Column(String(150), nullable=False)
     descricao_geral = Column(Text, nullable=False)
     status = Column(String(50), default="Rascunho")
-    valor_total = Column(Decimal(10, 2), default=0.00)
+    valor_total = Column(DECIMAL(10, 2), default=0.00)
     cliente_id = Column(Integer, ForeignKey("clientes.id", ondelete="CASCADE"), nullable=False)
     usuario_id = Column(Integer, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     criado_em = Column(DateTime, default=func.now())
@@ -53,8 +54,21 @@ class ItemEscopo(Base):
     descricao_detalhada = Column(Text, nullable=True)
     horas_estimadas = Column(Integer, default=0)
     complexidade = Column(String(20), default="Média")
-    valor_hora = Column(Decimal(10, 2), default=50.00)
-    custo_estimado = Column(Decimal(10, 2), default=0.00)
+    valor_hora = Column(DECIMAL(10, 2), default=50.00)
+    custo_estimado = Column(DECIMAL(10, 2), default=0.00)
     criado_em = Column(DateTime, default=func.now())
 
     projeto = relationship("Projeto", back_populates="itens")
+
+
+class Tecnologia(Base):
+    __tablename__ = "tecnologias"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nome = Column(String(100), nullable=False)
+    custo_base = Column(DECIMAL(10, 2), default=100.00)
+    multiplicador = Column(DECIMAL(10, 2), default=1.00)
+    usuario_id = Column(Integer, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    criado_em = Column(DateTime, default=func.now())
+
+    usuario = relationship("Usuario", back_populates="tecnologias")
