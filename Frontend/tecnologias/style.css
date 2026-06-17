@@ -1,0 +1,147 @@
+/* Estilos específicos da tela de Tecnologias */
+
+/* Item de tecnologia na lista */
+.tech-item {
+    background-color: #1a1b23;
+    border: 1px solid #2e303f;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tech-item:hover {
+    border-color: #9d4edd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(157, 78, 221, 0.15);
+}
+
+/* Informações da tecnologia */
+.tech-icon-box {
+    width: 45px;
+    height: 45px;
+    background-color: rgba(157, 78, 221, 0.1);
+    border: 1px solid rgba(157, 78, 221, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d4a3ff;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.tech-info {
+    margin-left: 15px;
+    flex-grow: 1;
+}
+
+.tech-name {
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 2px;
+}
+
+.tech-details {
+    font-size: 0.8rem;
+    color: #8e92a3;
+}
+
+/* Valor de hora final da tecnologia */
+.tech-value-box {
+    text-align: right;
+    margin-right: 20px;
+}
+
+.tech-calculated-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #d4a3ff;
+    text-shadow: 0 0 10px rgba(212, 163, 255, 0.3);
+}
+
+.tech-multi-badge {
+    font-size: 0.7rem;
+    font-weight: bold;
+    background-color: rgba(157, 78, 221, 0.15);
+    color: #d4a3ff;
+    padding: 3px 8px;
+    border-radius: 20px;
+    border: 1px solid rgba(157, 78, 221, 0.3);
+}
+
+/* Ações dos itens */
+.tech-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: transparent;
+}
+
+.btn-edit-tech {
+    color: #8e92a3;
+    border: 1px solid #2e303f;
+}
+
+.btn-edit-tech:hover {
+    color: #d4a3ff;
+    background-color: rgba(157, 78, 221, 0.1);
+    border-color: #9d4edd;
+}
+
+.btn-delete-tech {
+    color: #8e92a3;
+    border: 1px solid #2e303f;
+}
+
+.btn-delete-tech:hover {
+    color: #ff5555;
+    background-color: rgba(255, 85, 85, 0.1);
+    border-color: #ff5555;
+}
+
+/* Scrollbar Customizado */
+.tech-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tech-list-container::-webkit-scrollbar-track {
+    background: #121318;
+    border-radius: 10px;
+}
+
+.tech-list-container::-webkit-scrollbar-thumb {
+    background: #2e303f;
+    border-radius: 10px;
+}
+
+.tech-list-container::-webkit-scrollbar-thumb:hover {
+    background: #9d4edd;
+}
+
+/* Input customizado do Bootstrap dentro do form escuro */
+#tech-form .form-control {
+    color: #fff;
+    background-color: #121318;
+    border-color: #2e303f;
+}
+
+#tech-form .form-control:focus {
+    background-color: #121318;
+    border-color: #9d4edd;
+    box-shadow: 0 0 10px rgba(157, 78, 221, 0.25);
+    color: #fff;
+}

@@ -131,6 +131,7 @@ def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Ses
             2. Descrição técnica detalhada descrevendo o que será construído
             3. Estimativa de horas (um número inteiro realista, ex: 40, 60, 80)
             4. Nível de complexidade (Baixa, Média, Alta)
+            5. Identifique qual tecnologia da stack recomendada ({", ".join(payload.stack)}) será a principal tecnologia utilizada ou se aplica a este módulo. Coloque o nome exato da tecnologia no campo "tecnologia_utilizada". Caso nenhuma tecnologia da stack se aplique de forma proeminente, preencha com uma string vazia ou o nome de alguma tecnologia geral da stack.
 
             Você DEVE responder APENAS com um array JSON válido contendo objetos no formato abaixo:
             [
@@ -138,7 +139,8 @@ def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Ses
                 "titulo_tarefa": "Nome do Módulo",
                 "descricao_detalhada": "Descrição técnica das funcionalidades e requisitos do módulo.",
                 "horas_estimadas": 40,
-                "complexidade": "Média"
+                "complexidade": "Média",
+                "tecnologia_utilizada": "Python"
               }}
             ]
             Não inclua explicações, introduções ou blocos de código Markdown. Retorne estritamente o JSON.
@@ -169,32 +171,55 @@ def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Ses
 
     # Fallback se a IA falhar ou a chave não estiver configurada
     if not modulos:
+        tech_1 = payload.stack[0] if len(payload.stack) > 0 else ""
+        tech_2 = payload.stack[1] if len(payload.stack) > 1 else tech_1
         modulos = [
             {
                 "titulo_tarefa": "Estrutura Principal (Backend & Banco)",
                 "descricao_detalhada": f"Desenvolvimento da estrutura central do {payload.projeto} utilizando a stack recomendada: {', '.join(payload.stack)}.",
                 "horas_estimadas": 50,
-                "complexidade": "Média"
+                "complexidade": "Média",
+                "tecnologia_utilizada": tech_1
             },
             {
                 "titulo_tarefa": "Painel de Controle e Dashboards",
                 "descricao_detalhada": "Criação de interface de usuário (frontend) responsiva para controle dos módulos e estatísticas de uso.",
                 "horas_estimadas": 40,
-                "complexidade": "Média"
+                "complexidade": "Média",
+                "tecnologia_utilizada": tech_2
             },
             {
                 "titulo_tarefa": "Módulo de Relatórios e Exportação",
                 "descricao_detalhada": "Lógica para geração de relatórios, exportação de planilhas CSV/PDF e análises de desempenho.",
                 "horas_estimadas": 20,
-                "complexidade": "Baixa"
+                "complexidade": "Baixa",
+                "tecnologia_utilizada": tech_1
             }
         ]
 
     # 4. Salvar os módulos gerados como itens do escopo
     total_acumulado = 0.0
+    
+    # Buscar catálogo de tecnologias do usuário para aplicar custos dinâmicos
+    tecnologias_db = db.query(models.Tecnologia).filter(models.Tecnologia.usuario_id == usuario_id).all()
+    tech_map = {t.nome.lower().strip(): t for t in tecnologias_db}
+    
     for mod in modulos:
         horas = int(mod.get("horas_estimadas", 10))
-        valor_hora = 100.00 # Valor padrão da hora do desenvolvedor
+        
+        # Lógica de precificação dinâmica por tecnologia
+        tech_utilizada = mod.get("tecnologia_utilizada", "")
+        valor_hora = 100.00  # Valor base padrão
+        
+        if tech_utilizada:
+            tech_key = tech_utilizada.lower().strip()
+            if tech_key in tech_map:
+                tech_db = tech_map[tech_key]
+                custo_base = float(tech_db.custo_base)
+                multiplicador = float(tech_db.multiplicador)
+                valor_hora = custo_base * multiplicador
+                print(f"Aplicada precificação dinâmica para '{tech_utilizada}': {custo_base} * {multiplicador} = {valor_hora}")
+                
         custo = horas * valor_hora
         total_acumulado += custo
 

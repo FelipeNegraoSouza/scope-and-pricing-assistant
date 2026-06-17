@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "*" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "*" ]
 
 jobs:
   build-and-test:
@@ -14,14 +14,30 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
+    - name: Configurar Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Instalar Dependências Python
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r Backend/requirements.txt
+
+    - name: Executar Testes Automatizados (pytest)
+      env:
+        GEMINI_API_KEY: "" # Chave vazia para forçar fallback de dados mockados nos testes
+      run: |
+        python -m pytest Backend/app/tests -v
+
     - name: Configurar Docker Buildx
       uses: docker/setup-buildx-action@v3
 
     - name: Testar o Build dos Containers (Docker Compose)
       env:
-        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        MYSQL_ROOT_PASSWORD: "test_root_pass"
+        MYSQL_PASSWORD: "test_pass"
+        GEMINI_API_KEY: ""
       run: |
-        # Este comando simula o build de toda a infraestrutura no servidor do GitHub
+        # Este comando valida que o build de toda a infraestrutura no Docker compila sem erros
         docker compose build

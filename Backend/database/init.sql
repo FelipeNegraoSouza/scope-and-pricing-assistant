@@ -51,5 +51,23 @@ CREATE TABLE IF NOT EXISTS itens_escopo (
     FOREIGN KEY (projeto_id) REFERENCES projetos(id) ON DELETE CASCADE
 );
 
+-- 5b. TABELA: Tecnologias (Precificação Dinâmica)
+CREATE TABLE IF NOT EXISTS tecnologias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    custo_base DECIMAL(10, 2) DEFAULT 100.00,
+    multiplicador DECIMAL(10, 2) DEFAULT 1.00,
+    usuario_id INT NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 -- 6. DADOS INICIAIS
 INSERT INTO usuarios (id, nome, email, senha) VALUES (1, 'Felipe N.', 'teste@gmail.com', 'admin') ON DUPLICATE KEY UPDATE id=id;
+
+INSERT INTO tecnologias (id, nome, custo_base, multiplicador, usuario_id) VALUES 
+(1, 'Python', 100.00, 1.00, 1),
+(2, 'React', 110.00, 1.10, 1),
+(3, 'Legado', 150.00, 1.50, 1),
+(4, 'Docker', 120.00, 1.20, 1)
+ON DUPLICATE KEY UPDATE id=id;

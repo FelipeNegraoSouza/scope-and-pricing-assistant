@@ -107,3 +107,21 @@ class UsuarioSchema(UsuarioBase):
 class LoginRequest(BaseModel):
     email: str
     senha: str
+
+
+# tecnologia schemas
+class TecnologiaBase(BaseModel):
+    nome: str
+    custo_base: Decimal = Decimal("100.00")
+    multiplicador: Decimal = Decimal("1.00")
+
+class TecnologiaCreate(TecnologiaBase):
+    pass
+
+class TecnologiaSchema(TecnologiaBase):
+    id: int
+    usuario_id: int
+    criado_em: datetime
+
+    class Config:
+        from_attributes = True
