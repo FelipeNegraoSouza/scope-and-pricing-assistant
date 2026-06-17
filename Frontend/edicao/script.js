@@ -31,7 +31,12 @@ async function carregarProjeto() {
     }
 
     try {
-        const response = await fetch(`${API_BASE}/projetos/${projetoId}`);
+        const userId = localStorage.getItem("usuario_id") || "1";
+        const response = await fetch(`${API_BASE}/projetos/${projetoId}`, {
+            headers: {
+                "X-User-Id": userId
+            }
+        });
         if (!response.ok) throw new Error("Erro ao carregar projeto.");
 
         projetoDados = await response.json();
@@ -155,10 +160,12 @@ btnSalvar.addEventListener('click', async () => {
         btnSalvar.disabled = true;
         btnSalvar.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span> Salvando...';
 
+        const userId = localStorage.getItem("usuario_id") || "1";
         const response = await fetch(`${API_BASE}/projetos/${projetoId}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-User-Id': userId
             },
             body: JSON.stringify(payload)
         });

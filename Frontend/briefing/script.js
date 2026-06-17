@@ -69,10 +69,12 @@ formBriefing.addEventListener('submit', async function(e) {
     btnSpinner.classList.remove('d-none');
 
     try {
+        const userId = localStorage.getItem("usuario_id") || "1";
         const response = await fetch('http://localhost:8000/api/briefing', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-User-Id': userId
             },
             body: JSON.stringify(dadosBriefing)
         });

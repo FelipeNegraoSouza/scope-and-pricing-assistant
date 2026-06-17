@@ -1,11 +1,19 @@
 import os
 import re
 import json
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from typing import List
+from typing import List, Optional
 import google.generativeai as genai
+
+def get_current_user_id(x_user_id: Optional[str] = Header(None, alias="X-User-Id")) -> int:
+    if x_user_id:
+        try:
+            return int(x_user_id)
+        except ValueError:
+            pass
+    return 1 # Fallback para o usuário padrão Felipe N. (ID 1)
 
 from ..database import get_db
 from .. import models, schemas
@@ -21,9 +29,7 @@ else:
 
 # 1. GET /api/dashboard
 @router.get("/dashboard", response_model=schemas.DashboardStats)
-def get_dashboard_stats(db: Session = Depends(get_db)):
-    # ID do usuário padrão é 1
-    usuario_id = 1
+def get_dashboard_stats(db: Session = Depends(get_db), usuario_id: int = Depends(get_current_user_id)):
     
     # Escopos ativos (status em Rascunho, Gerado pela IA, Em Andamento)
     escopos_ativos = db.query(models.Projeto).filter(
@@ -72,8 +78,7 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
 
 # 2. POST /api/briefing
 @router.post("/briefing", response_model=schemas.ProjetoSchema)
-def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Session = Depends(get_db)):
-    usuario_id = 1 # Usuário padrão
+def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Session = Depends(get_db), usuario_id: int = Depends(get_current_user_id)):
     
     # 1. Buscar ou criar cliente
     cliente = db.query(models.Cliente).filter(
@@ -145,9 +150,15 @@ def create_briefing_and_generate_scope(payload: schemas.BriefingRequest, db: Ses
             else:
                 json_str = texto
                 
-            modulos = json.loads(json_str)
+            modulos_parsed = json.loads(json_str)
+            if not isinstance(modulos_parsed, list):
+                raise ValueError("Resposta do Gemini não é uma lista")
+            for item in modulos_parsed:
+                if not isinstance(item, dict):
+                    raise ValueError("Item do escopo não é um dicionário")
+            modulos = modulos_parsed
         except Exception as e:
-            print(f"Erro ao chamar a API do Gemini: {e}. Usando fallback.")
+            print(f"Erro ao chamar a API do Gemini ou processar a resposta: {e}. Usando fallback.")
             modulos = []
 
     # Fallback se a IA falhar ou a chave não estiver configurada
@@ -222,8 +233,8 @@ def get_projeto_by_id(id: int, db: Session = Depends(get_db)):
 
 # 4. PUT /api/projetos/{id}
 @router.put("/projetos/{id}", response_model=schemas.ProjetoSchema)
-def update_projeto_scope(id: int, payload: schemas.ProjetoUpdate, db: Session = Depends(get_db)):
-    projeto = db.query(models.Projeto).filter(models.Projeto.id == id).first()
+def update_projeto_scope(id: int, payload: schemas.ProjetoUpdate, db: Session = Depends(get_db), usuario_id: int = Depends(get_current_user_id)):
+    projeto = db.query(models.Projeto).filter(models.Projeto.id == id, models.Projeto.usuario_id == usuario_id).first()
     if not projeto:
         raise HTTPException(status_code=404, detail="Projeto não encontrado.")
 
@@ -232,13 +243,12 @@ def update_projeto_scope(id: int, payload: schemas.ProjetoUpdate, db: Session = 
     projeto.status = payload.status
     projeto.valor_total = payload.valor_total
 
-    # Remove todos os itens de escopo antigos
-    db.query(models.ItemEscopo).filter(models.ItemEscopo.projeto_id == id).delete()
+    # Remove todos os itens de escopo antigos esvaziando a relação (cascade="all, delete-orphan")
+    projeto.itens.clear()
 
-    # Adiciona os novos itens de escopo salvos pelo desenvolvedor
+    # Adiciona os novos itens de escopo salvos pelo desenvolvedor diretamente na relação
     for item in payload.itens:
         novo_item = models.ItemEscopo(
-            projeto_id=id,
             titulo_tarefa=item.titulo_tarefa,
             descricao_detalhada=item.descricao_detalhada,
             horas_estimadas=item.horas_estimadas,
@@ -246,7 +256,7 @@ def update_projeto_scope(id: int, payload: schemas.ProjetoUpdate, db: Session = 
             valor_hora=item.valor_hora,
             custo_estimado=item.horas_estimadas * item.valor_hora
         )
-        db.add(novo_item)
+        projeto.itens.append(novo_item)
 
     db.commit()
     db.refresh(projeto)

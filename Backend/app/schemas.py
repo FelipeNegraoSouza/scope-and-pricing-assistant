@@ -88,3 +88,22 @@ class DashboardStats(BaseModel):
     propostas_enviadas: int
     faturamento_potencial: Decimal
     ultimos_escopos: List[UltimoEscopo]
+
+# usuario schemas
+class UsuarioBase(BaseModel):
+    nome: str
+    email: str
+
+class UsuarioCreate(UsuarioBase):
+    senha: str
+
+class UsuarioSchema(UsuarioBase):
+    id: int
+    criado_em: datetime
+
+    class Config:
+        from_attributes = True
+
+class LoginRequest(BaseModel):
+    email: str
+    senha: str
