@@ -2,10 +2,62 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=./dashboard/index.html">
-    <title>Redirecionando...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Escopo - Login</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Específico do Login -->
+    <link rel="stylesheet" href="login_style.css">
 </head>
 <body>
-    <p>Redirecionando para o Dashboard... Se não for redirecionado automaticamente, <a href="./dashboard/index.html">clique aqui</a>.</p>
+
+    <div class="login-container text-center animate__animated animate__fadeIn">
+        <div class="login-card">
+            <header class="logo-header">
+                <i class="fa-solid fa-layer-group"></i>
+                <h1 class="logo-title">Assistente <span class="text-purple">de Escopo</span></h1>
+                <p class="text-muted small mt-1">Geração e Precificação de Software com IA</p>
+            </header>
+
+            <!-- Box para Mensagens de Erro -->
+            <div class="alert-danger" id="alert-error"></div>
+
+            <form id="login-form">
+                <!-- E-mail -->
+                <div class="custom-input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" class="custom-input" placeholder="seuemail@exemplo.com" required autocomplete="username">
+                </div>
+
+                <!-- Senha -->
+                <div class="custom-input-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" class="custom-input" placeholder="Sua senha" required autocomplete="current-password">
+                </div>
+
+                <!-- Botão de Ação -->
+                <button type="submit" class="btn-login mt-3">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i>Entrar
+                </button>
+            </form>
+
+            <!-- Dica de Acesso Rápido -->
+            <div class="dica-box">
+                <i class="fa-solid fa-lightbulb me-1"></i> <strong>Acesso Rápido:</strong><br>
+                <span class="small text-muted">Use as credenciais padrão do banco:</span><br>
+                <span class="small font-monospace">E-mail: felipe.ngsouza@gmail.com</span><br>
+                <span class="small font-monospace">Senha: admin</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Transição Comum -->
+    <script src="transitions.js"></script>
+    <!-- Script de Controle do Login -->
+    <script src="login_script.js"></script>
 </body>
 </html>
