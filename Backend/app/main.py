@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import time
 
 from .database import engine, Base, SessionLocal
 from .routes import projetos, usuarios, tecnologias
 from . import models
 
-# Inicializa as tabelas no banco de dados se não existirem
-Base.metadata.create_all(bind=engine)
+# Banco de dados e tabelas serão inicializados de forma resiliente abaixo
 
 # Semeia o usuário desenvolvedor padrão (ID 1) caso ele não exista
 def seed_default_user():
@@ -46,7 +46,29 @@ def seed_default_user():
     finally:
         db.close()
 
-seed_default_user()
+# Inicializa as tabelas no banco de dados de forma resiliente
+def init_db_with_retries(max_retries=5, delay=3):
+    db_initialized = False
+    for i in range(max_retries):
+        try:
+            Base.metadata.create_all(bind=engine)
+            print("Tabelas do banco de dados verificadas/criadas com sucesso.")
+            db_initialized = True
+            break
+        except Exception as e:
+            print(f"Tentativa {i+1}/{max_retries} falhou ao conectar ao banco de dados: {e}")
+            if i < max_retries - 1:
+                time.sleep(delay)
+            else:
+                print("Não foi possível conectar ao banco de dados após várias tentativas. Continuando sem tabelas criadas.")
+    
+    if db_initialized:
+        try:
+            seed_default_user()
+        except Exception as e:
+            print(f"Erro ao semear dados iniciais: {e}")
+
+init_db_with_retries()
 
 app = FastAPI(
     title="Assistente de Escopo e Precificação API",
